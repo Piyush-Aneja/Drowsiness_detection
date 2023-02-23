@@ -20,11 +20,11 @@ validation_batch_generator = generate('data/valid', shuffle=True,
 model = Sequential([
     Conv2D(32, kernel_size=(3, 3), input_shape=(
         24, 24, 1), activation='relu', ),
-    MaxPooling2D(pool_size=(1, 1)),
+    MaxPooling2D(pool_size=(2, 2)),  # changed from 1,1 everywhere
     Conv2D(32, (3, 3), activation='relu'),
-    MaxPooling2D(pool_size=(1, 1)),
+    MaxPooling2D(pool_size=(2, 2)),
     Conv2D(64, (3, 3), activation='relu'),
-    MaxPooling2D(pool_size=(1, 1)),
+    MaxPooling2D(pool_size=(2, 2)),
     Dropout(0.25),
     Flatten(),
     Dense(128, activation='relu'),
@@ -32,8 +32,9 @@ model = Sequential([
     Dense(2, activation='softmax')
 ])
 
+
 model.compile(optimizer='adam', loss='categorical_crossentropy',
               metrics=['accuracy'])
-model.fit_generator(training_batch_generator, validation_data=validation_batch_generator, epochs=15, steps_per_epoch=len(
+model.fit_generator(training_batch_generator, validation_data=validation_batch_generator, epochs=10, steps_per_epoch=len(
     training_batch_generator.classes)//32, validation_steps=len(validation_batch_generator.classes)//32)
 model.save('models/cnnCat2.h5', overwrite=True)

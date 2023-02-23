@@ -6,8 +6,8 @@ from datetime import datetime
 from gtts import gTTS
 from pygame import mixer
 import numpy as np
+import tensorflow as tf
 import playsound
-
 
 mixer.init()
 proj_path = "D:\\vs code files\\python files\\down Drowsiness detection\\Drowsiness detection"
@@ -102,7 +102,7 @@ while(True):
         score = 0
     cv2.putText(frame, 'Score:'+str(score), (100, height-20),
                 font, 1, (255, 255, 255), 1, cv2.LINE_AA)
-    if(score > 15):
+    if(score > 15 or face_not_detect > 30):
         path_to_images = os.path.join(proj_path, "drowsy_captures")
         now = datetime.now()
 
@@ -111,7 +111,7 @@ while(True):
 
         # index_of_person = len(os.listdir(path_to_images))+1
         filename = "drowsy_"+current_time+".jpg"
-        if(right_eye_pred[0] == 0 and left_eye_pred[0] == 0):
+        if((right_eye_pred[0] == 0 and left_eye_pred[0] == 0) or face_not_detect > 30):
             cv2.imwrite(os.path.join(path_to_images,
                                      filename), frame)
         try:
